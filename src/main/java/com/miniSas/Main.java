@@ -3,9 +3,9 @@ package com.miniSas;
 import com.miniSas.dao.BookDao;
 import com.miniSas.dao.BookDaoImpl;
 import com.miniSas.dao.UtilisateurDao;
+import com.miniSas.dao.UtilisateurDaoImpl;
 import com.miniSas.model.Book;
 import com.miniSas.model.Utilisateur;
-import com.miniSas.dao.UtilisateurDaoImpl;
 
 
 public class Main {

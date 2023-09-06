@@ -9,7 +9,7 @@ public interface BookDao {
 
     void save(Book Book);
 
-    void deleteByISBN(int id);
+    void deleteByISBN(String id);
 
     List<Book> findAllByNom_auteurOrTitle(String Nom_auteurTitre);
 }

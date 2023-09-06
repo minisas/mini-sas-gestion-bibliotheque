@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public class BookDaoImpl implements BookDao {
 
@@ -112,7 +111,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void deleteByISBN(int ISBN) {
+    public void deleteByISBN(String ISBN) {
         Connection con = DBConnection.getConnection();
         if (con == null) {
             return;
@@ -120,7 +119,7 @@ public class BookDaoImpl implements BookDao {
         String query = "DELETE FROM `Livres` WHERE `ISBN` = ?";
         try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
 
-            preparedStatement.setInt(1, ISBN);
+            preparedStatement.setString(1, ISBN);
 
             preparedStatement.executeUpdate();
 
