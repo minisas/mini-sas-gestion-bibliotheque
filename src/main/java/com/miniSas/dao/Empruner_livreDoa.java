@@ -2,7 +2,6 @@ package com.miniSas.dao;
 
 import com.miniSas.model.Emprunter_livre;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public interface Empruner_livreDoa {

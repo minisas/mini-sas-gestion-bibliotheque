@@ -5,6 +5,7 @@ import com.miniSas.utils.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -12,7 +13,34 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
 
     @Override
     public Date checkStatusBook(String ISBN) {
-        return null;
+        Connection con = DBConnection.getConnection();
+        if (con == null){
+            return null;
+        }
+        Date date_retour = null;
+        String query = "SELECT * FROM `emprunter_livre` ORDER BY `emprunter_livre`.`date_retour` DESC LIMIT 1";
+        try (PreparedStatement preparedStatement = con.prepareStatement((query))){
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                Emprunter_livre emprunter_livre = new Emprunter_livre (resultSet.getDate("date_emprunter"),
+                        resultSet.getDate("date_retour"),
+                        resultSet.getString("ISBN"),
+                        resultSet.getInt("Id_utilisateur"));
+            }
+
+        } catch (SQLException se){
+            se.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException se){
+                se.printStackTrace();
+            }
+        }
+
+        return date_retour;
     }
 
     @Override
@@ -55,28 +83,11 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
         if (con == null){
             return;
         }
-        String query = "DELETE FROM `Livres` WHERE `ISBN` = ?";
-        try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
-
-            preparedStatement.setString(1, ISBN);
+        String query = "UPDATE `Livres` SET `Status`=0 WHERE `ISBN`=?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(query);){
+            preparedStatement.setString(1,ISBN);
 
             preparedStatement.executeUpdate();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        }
-        finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        String query2 = "UPDATE `Livres` SET `Status`=0 WHERE `ISBN`=?";
-        try (PreparedStatement preparedStatement2 = con.prepareStatement(query2);){
-            preparedStatement2.setString(1,ISBN);
-
-            preparedStatement2.executeUpdate();
         } catch (SQLException se){
             se.printStackTrace();
         }
@@ -95,28 +106,11 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
         if (con == null){
             return;
         }
-        String query = "DELETE FROM `Livres` WHERE `ISBN` = ?";
-        try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
-
-            preparedStatement.setString(1, ISBN);
+        String query = "UPDATE `Livres` SET `Status`=-1 WHERE `ISBN`=?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(query);){
+            preparedStatement.setString(1,ISBN);
 
             preparedStatement.executeUpdate();
-
-        } catch (SQLException se) {
-            se.printStackTrace();
-        }
-        finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        String query2 = "UPDATE `Livres` SET `Status`=-1 WHERE `ISBN`=?";
-        try (PreparedStatement preparedStatement2 = con.prepareStatement(query2);){
-            preparedStatement2.setString(1,ISBN);
-
-            preparedStatement2.executeUpdate();
         } catch (SQLException se){
             se.printStackTrace();
         }
