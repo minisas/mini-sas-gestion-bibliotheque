@@ -18,16 +18,17 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
             return null;
         }
         Date date_retour = null;
-        String query = "SELECT * FROM `emprunter_livre` ORDER BY `emprunter_livre`.`date_retour` DESC LIMIT 1";
+        String query = "SELECT * FROM `emprunter_livre` WHERE `ISBN` = ? ORDER BY `emprunter_livre`.`date_retour` DESC LIMIT 1";
         try (PreparedStatement preparedStatement = con.prepareStatement((query))){
-
+            preparedStatement.setString(1,ISBN);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()){
-                Emprunter_livre emprunter_livre = new Emprunter_livre (resultSet.getDate("date_emprunter"),
+                Emprunter_livre emprunter_livre = new Emprunter_livre (resultSet.getDate("date_emprunte"),
                         resultSet.getDate("date_retour"),
                         resultSet.getString("ISBN"),
                         resultSet.getInt("Id_utilisateur"));
+                date_retour = resultSet.getDate("date_retour");
             }
 
         } catch (SQLException se){
