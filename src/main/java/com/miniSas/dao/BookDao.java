@@ -7,6 +7,9 @@ import java.util.List;
 public interface BookDao {
     List<Book> findAll();
 
+    List<Book> findAllBookDisponible();
+    List<Book> findAllBookEmprunter();
+
     void save(Book Book);
 
     void deleteByISBN(String id);

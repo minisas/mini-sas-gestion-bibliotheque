@@ -1,5 +1,6 @@
 package com.miniSas.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Emprunter_livre {
@@ -15,7 +16,7 @@ public class Emprunter_livre {
         this.date_emprunte = date_emprunte;
         this.date_retour = date_retour;
         this.ISBN = ISBN;
-        this.Id_utilisateur = id_utilisateur;
+        Id_utilisateur = id_utilisateur;
     }
 
     public Date getDate_emprunte() {

@@ -8,7 +8,7 @@ public class Emprunter_livreBuilder {
     private String ISBN;
     private int Id_utilisateur;
 
-    public Emprunter_livreBuilder date_emprunte(Date NomEtPrenom){
+    public Emprunter_livreBuilder date_emprunte(Date date_emprunte){
         this.date_emprunte = date_emprunte;
         return this;
     }

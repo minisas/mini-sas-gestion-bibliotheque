@@ -1,27 +1,25 @@
 package com.miniSas;
 
-import com.miniSas.dao.BookDao;
-import com.miniSas.dao.BookDaoImpl;
-import com.miniSas.dao.UtilisateurDao;
-import com.miniSas.dao.UtilisateurDaoImpl;
-import com.miniSas.model.Book;
-import com.miniSas.model.Utilisateur;
+import com.miniSas.dao.*;
+import com.miniSas.model.*;
+
+import java.util.Date;
 
 
 public class Main {
     public static void main(String[] args) {
 
-
         BookDao BookDao = new BookDaoImpl();
-        Book book = Book.builder()
-                .Titre("Le Dernier Jour À Condamner5463")
-                .Nom_auteur("Victore Higo34355")
-                .Status(1)
-                .ISBN("LDJACVH")
-                .build();
-        String bookChercher = "Higo";
-        BookDao.findAllByNom_auteurOrTitle(bookChercher).forEach(System.out::println);
-        BookDao.save(book);
-        BookDao.findAll().forEach(System.out::println);
+        Empruner_livreDoa Emprunter_livreDao = new Empruner_livreDoaImpl();
+
+            Emprunter_livre emprunter_livre = Emprunter_livre.builder()
+                    .date_emprunte(new Date())
+                    .date_retour(new Date())
+                    .Id_utilisateur(1)
+                    .ISBN("AntJeaAno")
+                    .build();
+            Emprunter_livreDao.emprunterBook(emprunter_livre);
+            BookDao.findAllBookEmprunter().forEach(System.out::println);
+            //System.out.println(Emprunter_livreDao.checkStatusBook(""));
     }
 }

@@ -45,6 +45,75 @@ public class BookDaoImpl implements BookDao {
 
         return Books;
     }
+    @Override
+    public List<Book> findAllBookDisponible() {
+        Connection con =DBConnection.getConnection();
+        if (con == null) {
+            return null;
+        }
+
+        List<Book> Books = new LinkedList<>();
+
+        String query = "SELECT * FROM Livres WHERE Status = 0";
+        try (PreparedStatement preparedStatement = con.prepareStatement((query))){
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                Book book = new Book (resultSet.getString("Titre"),
+                        resultSet.getString("Nom_auteur"),
+                        resultSet.getInt("Status"),
+                        resultSet.getString("ISBN"));
+                Books.add(book);
+            }
+
+        } catch (SQLException se){
+            se.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException se){
+                se.printStackTrace();
+            }
+        }
+
+        return Books;
+    }
+
+    @Override
+    public List<Book> findAllBookEmprunter() {
+        Connection con =DBConnection.getConnection();
+        if (con == null) {
+            return null;
+        }
+
+        List<Book> Books = new LinkedList<>();
+
+        String query = "SELECT * FROM Livres WHERE Status = 1";
+        try (PreparedStatement preparedStatement = con.prepareStatement((query))){
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                Book book = new Book (resultSet.getString("Titre"),
+                        resultSet.getString("Nom_auteur"),
+                        resultSet.getInt("Status"),
+                        resultSet.getString("ISBN"));
+                Books.add(book);
+            }
+
+        } catch (SQLException se){
+            se.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException se){
+                se.printStackTrace();
+            }
+        }
+
+        return Books;
+    }
 
     @Override
     public void save(Book Book) {
