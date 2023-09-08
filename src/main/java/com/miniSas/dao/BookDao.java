@@ -15,4 +15,6 @@ public interface BookDao {
     void deleteByISBN(String id);
 
     List<Book> findAllByNom_auteurOrTitle(String Nom_auteurTitre);
+
+    int statistique(int Status);
 }

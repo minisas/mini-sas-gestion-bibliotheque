@@ -238,4 +238,9 @@ public class BookDaoImpl implements BookDao {
         return Books;
     }
 
+    @Override
+    public int statistique(int Status) {
+        return 0;
+    }
+
 }

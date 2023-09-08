@@ -1,0 +1,19 @@
+        /*String dateString = "2023-09-14";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        Emprunter_livre emprunter_livre = Emprunter_livre.builder()
+                .date_emprunte(new Date())
+                .date_retour(date)
+                .Id_utilisateur(1)
+                .ISBN("AntJeaAno")
+                .build();
+            Emprunter_livreDao.emprunterBook(emprunter_livre);*/
+            //Emprunter_livreDao.retourBook("AntJeaAno");
+           // BookDao.findAllBookEmprunter().forEach(System.out::println);
+            //System.out.println(Emprunter_livreDao.checkStatusBook("AntJeaAno"));
