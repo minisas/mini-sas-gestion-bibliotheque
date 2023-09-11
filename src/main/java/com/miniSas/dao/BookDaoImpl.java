@@ -135,7 +135,7 @@ public class BookDaoImpl implements BookDao {
                 try (PreparedStatement preparedStatement2 = con.prepareStatement(query2);){
                     preparedStatement2.setString(1,Book.getTitre());
                     preparedStatement2.setString(2,Book.getNom_auteur());
-                    preparedStatement2.setInt(3,Book.getStatus());
+                    preparedStatement2.setInt(3,0);
                     preparedStatement2.setString(4,Book.getISBN());
 
                     preparedStatement2.executeUpdate();
@@ -185,20 +185,37 @@ public class BookDaoImpl implements BookDao {
         if (con == null) {
             return;
         }
-        String query = "DELETE FROM `Livres` WHERE `ISBN` = ?";
-        try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
+        if (ISBN == "ALL"){
+            String query = "UPDATE `Livres` SET `Status`= -2 WHERE `Status`= -1";
+            try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
 
-            preparedStatement.setString(1, ISBN);
+                preparedStatement.executeUpdate();
 
-            preparedStatement.executeUpdate();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }else {
+            String query = "UPDATE `Livres` SET `Status` = -2 WHERE `ISBN`=?";
+            try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
 
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                preparedStatement.setString(1, ISBN);
+
+                preparedStatement.executeUpdate();
+
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -212,7 +229,7 @@ public class BookDaoImpl implements BookDao {
 
         List<Book> Books = new LinkedList<>();
 
-        String query = "SELECT * FROM Livres WHERE Nom_auteur LIKE '%"+Nom_auteurTitre+"%' OR Titre LIKE '%"+Nom_auteurTitre+"%'";
+        String query = "SELECT * FROM Livres WHERE (Nom_auteur LIKE '%"+Nom_auteurTitre+"%' OR Titre LIKE '%"+Nom_auteurTitre+"%') AND `Status` != -2";
         try (PreparedStatement preparedStatement = con.prepareStatement((query))){
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -240,7 +257,28 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public int statistique(int Status) {
-        return 0;
+        int Statistique = 0;
+        Connection con =DBConnection.getConnection();
+        if (con == null) {
+            return 0;
+        }
+        String query = "SELECT COUNT(*) AS Statistique FROM `Livres` WHERE `Status` = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
+            preparedStatement.setInt(1, Status);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Statistique = resultSet.getInt("Statistique");
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Statistique;
     }
 
 }

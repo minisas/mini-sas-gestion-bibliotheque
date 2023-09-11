@@ -13,12 +13,14 @@ import java.util.Date;
 
 import java.util.Calendar;
 
+import static com.miniSas.dao.DBConnection.getConnection;
+
 public class Empruner_livreDoaImpl implements Empruner_livreDoa{
 
     @Override
     public int checkStatusBook(String ISBN) {
         // la valeur retourner : -1 = le livre est perdu | 0 = le livre fait son retour | 1 = en cour emprunter
-        Connection con = DBConnection.getConnection();
+        Connection con = getConnection();
         if (con == null){
             return 2;
         }
@@ -27,8 +29,6 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
         int anneeRetour=0;
         int moisRetour=0;
         int jourRetour=0;
-
-        int casDeBook;
 
         Date date_aujourdHui = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -94,8 +94,65 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
     }
 
     @Override
+    public void checkStatusBook() {
+        Date date_aujourdHui = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date_aujourdHui);
+        int anneeAujourdHui = calendar.get(Calendar.YEAR);
+        int moisAujourdHui = calendar.get(Calendar.MONTH) + 1;
+        int jourAujourdHui = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String query = "SELECT * FROM emprunter_livre el, livres l WHERE el.ISBN = l.ISBN AND l.Status = 1 ORDER BY el.date_retour DESC";
+
+        try (Connection con = getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String ISBN = resultSet.getString("ISBN");
+                String date_retour = String.valueOf(resultSet.getDate("date_retour"));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = dateFormat.parse(date_retour);
+                Calendar calendar2 = Calendar.getInstance();
+                calendar2.setTime(date);
+                int anneeRetour = calendar2.get(Calendar.YEAR);
+                int moisRetour = calendar2.get(Calendar.MONTH) + 1;
+                int jourRetour = calendar2.get(Calendar.DAY_OF_MONTH);
+
+                if (anneeRetour > anneeAujourdHui) {
+                    return;
+                }
+                if (anneeAujourdHui > anneeRetour) {
+                    perduBook(ISBN);
+                    return;
+                }
+                if (anneeAujourdHui == anneeRetour) {
+                    if (moisRetour > moisAujourdHui) {
+                        return;
+                    }
+                    if (moisRetour < moisAujourdHui) {
+                        perduBook(ISBN);
+                        return;
+                    }
+                    if (moisRetour == moisAujourdHui) {
+                        if (jourRetour > jourAujourdHui) {
+                            return;
+                        }
+                        if (jourRetour < jourAujourdHui) {
+                            perduBook(ISBN);
+                            return;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void emprunterBook(Emprunter_livre Emprunter_livre) {
-        Connection con = DBConnection.getConnection();
+        Connection con = getConnection();
         if (con == null){
             return;
         }
@@ -129,7 +186,7 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
 
     @Override
     public void retourBook(String ISBN) {
-        Connection con = DBConnection.getConnection();
+        Connection con = getConnection();
         if (con == null){
             return;
         }
@@ -152,7 +209,7 @@ public class Empruner_livreDoaImpl implements Empruner_livreDoa{
 
     @Override
     public void perduBook(String ISBN) {
-        Connection con = DBConnection.getConnection();
+        Connection con = getConnection();
         if (con == null){
             return;
         }

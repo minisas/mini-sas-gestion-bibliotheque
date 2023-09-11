@@ -46,10 +46,10 @@ public class UtilisateurDaoImpl implements UtilisateurDao
     }
 
     @Override
-    public void save(Utilisateur Utilisateur) {
+    public int save(Utilisateur Utilisateur) {
         Connection con = DBConnection.getConnection();
         if (con == null){
-            return;
+            return 0;
         }
 
         if(Utilisateur.getId_utilisateur() > 0){ // update
@@ -76,7 +76,21 @@ public class UtilisateurDaoImpl implements UtilisateurDao
                 preparedStatement.executeUpdate();
             } catch (SQLException se){
                 se.printStackTrace();
-            }finally {
+            }
+            String query2 = "SELECT * FROM Utilisateur WHERE NomEtPrenom = ?";
+            try (PreparedStatement preparedStatement2 = con.prepareStatement(query2);){
+                preparedStatement2.setString(1,Utilisateur.getNomEtPrenom());
+
+                ResultSet resultSet = preparedStatement2.executeQuery();
+                if (resultSet.next()) {
+                    return resultSet.getInt("Id_utilisateur");
+                } else {
+                    return 0;
+                }
+            } catch (SQLException se){
+                se.printStackTrace();
+            }
+            finally {
                 try {
                     con.close();
                 } catch (SQLException e) {
@@ -84,6 +98,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao
                 }
             }
         }
+        return 0;
     }
 
     @Override

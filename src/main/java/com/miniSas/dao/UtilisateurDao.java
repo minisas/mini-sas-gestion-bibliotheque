@@ -7,7 +7,7 @@ import java.util.List;
 public interface UtilisateurDao {
     List<Utilisateur> findAll();
 
-    void save(Utilisateur Utilisateur);
+    int save(Utilisateur Utilisateur);
 
     void deleteById_utilisateur(int id);
 }

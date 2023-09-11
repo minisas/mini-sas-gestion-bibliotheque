@@ -17,3 +17,8 @@
             //Emprunter_livreDao.retourBook("AntJeaAno");
            // BookDao.findAllBookEmprunter().forEach(System.out::println);
             //System.out.println(Emprunter_livreDao.checkStatusBook("AntJeaAno"));
+
+            taille compailer 153
+
+            153 - 5 = 148  (5 nta3 l9smat)
+            148 / 4 = 37 (37 hiya l espace dyal titre wla nom auteur .....)

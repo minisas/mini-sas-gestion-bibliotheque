@@ -26,3 +26,4 @@ CREATE TABLE Emprunter_livre (
                                  FOREIGN KEY (Id_utilisateur) REFERENCES Utilisateur(Id_utilisateur)
 );
 ALTER TABLE `livres` CHANGE `Status` `Status` TINYINT NULL DEFAULT NULL COMMENT '-1 = Perdue | 0 = Dispolnible | 1 = Emprunter';
+ALTER TABLE `livres` CHANGE `Status` `Status` TINYINT(4) NULL DEFAULT NULL COMMENT '-2 = Supprimer | -1 = Perdue | 0 = Dispolnible | 1 = Emprunter';
