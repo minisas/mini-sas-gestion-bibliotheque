@@ -437,6 +437,7 @@ public class Main {
                     int totalBookDisponible = BookDao.statistique(0);
                     int totalBookEmprunte = BookDao.statistique(1);
                     int totalBookPerdue = BookDao.statistique(-1);
+                    int totalBook = BookDao.statistique(2);
                     System.out.println(createTable("",""));
                     System.out.println(createTable("Voir les statistiques",rougeClairColor));
                     System.out.println(createTable("style2",""));
@@ -445,6 +446,8 @@ public class Main {
                     System.out.println(createTrStatistique("Totale Des Livres Empruntes", totalBookEmprunte));
                     System.out.println(createTable("style2",""));
                     System.out.println(createTrStatistique("Totale Des Livres Perdues", totalBookPerdue));
+                    System.out.println(createTable("style2",""));
+                    System.out.println(createTrStatistique("Totale Des Livres", totalBook));
                     System.out.println(createTable("style2",""));
                     break;
                 case 9:
@@ -456,9 +459,10 @@ public class Main {
                     System.out.println(createTable("3.Modifier un emprunteur",vertClairColor));
                     System.out.println(createTable("4.Supprimer un emprunteur",vertClairColor));
                     System.out.println(createTable("5.Supprimer les livres perdus",vertClairColor));
+                    System.out.println(createTable("6.Supprimer un livre par ISBN",vertClairColor));
                     System.out.println(createTable("0.Quit",vertClairColor));
                     System.out.println(createTable("",""));
-                    System.out.print("Enterez votre choix (0-5): ");
+                    System.out.print("Enterez votre choix (0-6): ");
                     choix = scanner.nextInt();
                     clearConsole(24);
                     switch (choix){
@@ -508,6 +512,16 @@ public class Main {
                         case 5:
                             BookDao.deleteByISBN("ALL");
                             System.out.println("Les Livres Perdues Sont Supprimer.");
+                            break;
+                        case 6:
+                            System.out.println(createTable("",""));
+                            System.out.println(createTable("Supprimer un livre par ISBN",rougeClairColor));
+                            System.out.println(createTable("",""));
+                            System.out.println("Enterez ISBN de livre: ");
+                            scanner.nextLine();
+                            ISBN = scanner.nextLine();
+                            BookDao.deleteByISBN(ISBN);
+                            System.out.println("Le Livre de ISBN `" + ISBN + "` a ete supprimer.");
                             break;
                         case 0:
                             System.out.println("Fermeture du programme.");

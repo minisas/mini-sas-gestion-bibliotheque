@@ -262,20 +262,38 @@ public class BookDaoImpl implements BookDao {
         if (con == null) {
             return 0;
         }
-        String query = "SELECT COUNT(*) AS Statistique FROM `Livres` WHERE `Status` = ?";
-        try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
-            preparedStatement.setInt(1, Status);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Statistique = resultSet.getInt("Statistique");
+        if (Status == 2){
+            String query = "SELECT COUNT(*) AS Statistique FROM `Livres` WHERE `Status` = -1 OR `Status` = 0 OR `Status` = 1";
+            try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    Statistique = resultSet.getInt("Statistique");
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        } catch (SQLException se) {
-            se.printStackTrace();
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        } else{
+            String query = "SELECT COUNT(*) AS Statistique FROM `Livres` WHERE `Status` = ?";
+            try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
+                preparedStatement.setInt(1, Status);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    Statistique = resultSet.getInt("Statistique");
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            } finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         return Statistique;
