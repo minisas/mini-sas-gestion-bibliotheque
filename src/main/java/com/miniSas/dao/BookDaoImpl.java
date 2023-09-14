@@ -201,15 +201,30 @@ public class BookDaoImpl implements BookDao {
                 }
             }
         }else {
-            String query = "UPDATE `Livres` SET `Status` = -2 WHERE `ISBN`=?";
-            try (PreparedStatement preparedStatement = con.prepareStatement(query);) {
+            String query = "SELECT * FROM Livres WHERE `ISBN`=?";
+            try (PreparedStatement preparedStatement = con.prepareStatement((query))){
 
-                preparedStatement.setString(1, ISBN);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                int Status = 0;
+                while (resultSet.next()){
+                    Status = resultSet.getInt("Status");
+                }
+                if (Status != 1){
+                    String query2 = "UPDATE `Livres` SET `Status` = -2 WHERE `ISBN`=?";
+                    try (PreparedStatement preparedStatement2 = con.prepareStatement(query2);) {
 
-                preparedStatement.executeUpdate();
+                        preparedStatement2.setString(1, ISBN);
 
-            } catch (SQLException se) {
-                se.printStackTrace();
+                        preparedStatement2.executeUpdate();
+
+                    } catch (SQLException se) {
+                        se.printStackTrace();
+                    }
+                }else {
+                    System.out.println("On ne peut pas supprimer ce livre qui contient ISBN = "+ISBN);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             } finally {
                 try {
                     con.close();

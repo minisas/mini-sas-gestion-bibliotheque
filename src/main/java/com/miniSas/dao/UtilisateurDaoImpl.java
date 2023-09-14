@@ -53,10 +53,10 @@ public class UtilisateurDaoImpl implements UtilisateurDao
         }
 
         if(Utilisateur.getId_utilisateur() > 0){ // update
-            String query = "UPDATE `Utilisateur` SET `Id_utilisateur`=?,`NomEtPrenom`=?";
+            String query = "UPDATE `Utilisateur` SET `NomEtPrenom`=? WHERE `Id_utilisateur`=?";
             try (PreparedStatement preparedStatement = con.prepareStatement(query);){
-                preparedStatement.setInt(1,Utilisateur.getId_utilisateur());
-                preparedStatement.setString(2,Utilisateur.getNomEtPrenom());
+                preparedStatement.setString(1,Utilisateur.getNomEtPrenom());
+                preparedStatement.setInt(2,Utilisateur.getId_utilisateur());
 
                 preparedStatement.executeUpdate();
             } catch (SQLException se){
