@@ -204,6 +204,8 @@ public class BookDaoImpl implements BookDao {
             String query = "SELECT * FROM Livres WHERE `ISBN`=?";
             try (PreparedStatement preparedStatement = con.prepareStatement((query))){
 
+                preparedStatement.setString(1, ISBN);
+
                 ResultSet resultSet = preparedStatement.executeQuery();
                 int Status = 0;
                 while (resultSet.next()){
